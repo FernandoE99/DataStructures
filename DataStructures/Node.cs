@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DataStructures
 {
@@ -11,24 +12,23 @@ namespace DataStructures
 
         Node()
         {
-            next = this;
+            next = this; 
         }
 
-       public Node(object data, Node Next)
+       public Node(object data)
         {
             this.data = data;
-            this.next = this;
+            this.next = null;
         }
 
-        object information()
-        {
-            return data;
+        public object Data {
+            get { return this.data;}
+            set { this.data = value; }
         }
 
-        Node next()
-        {
-            return next;
+        public Node Next {
+            get { return this.next; }
+            set { this.next = value; }
         }
-
     }
 }
