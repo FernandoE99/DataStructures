@@ -5,7 +5,7 @@ namespace DataStructures
 {
     public class DirectedGraph<T, K> : AbstractGraph<T, K>
     {
-        public override bool AddEdge(T v1, T v2, K w)
+        public override bool AddEdge(T v1, T v2, K weight)
         {
             if (v1 is null)
                 throw new ArgumentNullException(nameof(v1));
@@ -13,8 +13,8 @@ namespace DataStructures
             if (v2 is null)
                 throw new ArgumentNullException(nameof(v2));
 
-            if (w is null)
-                throw new ArgumentNullException(nameof(w));
+            if (weight is null)
+                throw new ArgumentNullException(nameof(weight));
 
             if (!VertexSet.Contains(v1) || !VertexSet.Contains(v2)) 
                 return false;
@@ -24,7 +24,7 @@ namespace DataStructures
                 return false;
             
             EdgeSet.Add(pair);
-            Weights[pair] = w;
+            Weights[pair] = weight;
             return true;
         }
 
