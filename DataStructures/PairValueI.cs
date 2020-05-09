@@ -2,19 +2,20 @@
 
 namespace DataStructures
 {
-    public class PairValueImplementation <T> : IPairValue<T>
+    public class PairValueI <T> : IPairValue<T>
     {
         private readonly T _t1;
         private readonly T _t2;
 
-        public PairValueImplementation(T t1, T t2) {
+        public PairValueI(T t1, T t2) {
 
-            if (t1 == null || t2 == null){
-                throw new ArgumentNullException();
-            }
-            if (t1.GetType() != t2.GetType()) {
-                throw new ArgumentException();
-            }
+            if (t1 is null)
+                throw new ArgumentNullException(nameof(t1));
+
+            if (t2 is null)
+                throw new ArgumentNullException(nameof(t2));
+
+
             _t1 = t1;
             _t2 = t2;
 
@@ -36,12 +37,12 @@ namespace DataStructures
         }
 
         public override bool Equals(object o) // Returns true if, passed another object, it has the same type (PairValueImplementation)
-            //And its left-reght members are equal to those of theo bject in consideration.
+            //And its left-reght members are equal to those of the object in consideration.
         {
-            if (o == null || o.GetType() != typeof(PairValueImplementation<T>)) {
+            if (o == null || o.GetType() != typeof(PairValueI<T>)) 
                 return false;
-              }
-            PairValueImplementation<T> casted = (PairValueImplementation<T>) o;
+              
+            PairValueI<T> casted = (PairValueI<T>) o;
             return casted._t1.Equals(_t1) && casted._t2.Equals(_t2);
         }
 

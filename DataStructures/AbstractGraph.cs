@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DataStructures
 {
-    public abstract class AbstractGraph<T, K> : DGraph<T, K>
+    public abstract class AbstractGraph<T, K> : Graph<T, K>
     {
         protected readonly List<T> VertexSet = new List<T>(); //List of vertex
         protected readonly List<IPairValue<T>> EdgeSet = new List<IPairValue<T>>();//List of edges
@@ -11,58 +11,71 @@ namespace DataStructures
         //This will have a keyset of PairValues and a weight K as association value
         public bool AddVertex(T vertex)
         {
-            if (vertex == null) {
-                throw new ArgumentNullException();
-            }
-            if (VertexSet.Contains(vertex)) {
+            if (vertex == null)
+                throw new ArgumentNullException(nameof(vertex));
+            
+            if (VertexSet.Contains(vertex)) 
                 return false;
-            }
+            
             VertexSet.Add(vertex);
             return true;
         }
 
-        public void AddVertex(IEnumerable<T> vertexSet)
+        public void AddVertices(IEnumerable<T> vertices)
         {
-            if (vertexSet == null) {
-                throw new ArgumentNullException();
-            }
-            using (var it = VertexSet.GetEnumerator()) {
-                if (it.Current != null && !VertexSet.Contains(it.Current)) {
-                    VertexSet.Add(it.Current);
-                }
+            if (vertices == null) 
+                throw new ArgumentNullException(nameof(vertices));
+
+            foreach (var vertex in vertices)
+            {
+                AddVertex(vertex);
             }
 
         }
 
         public bool DeleteVertex(T vertex)
         {
-            if (vertex == null) {
-                throw new ArgumentNullException();
-            }
-            if (!VertexSet.Contains(vertex)) {
+            if (vertex == null) 
+                throw new ArgumentNullException(nameof(vertex));
+            
+            if (!VertexSet.Contains(vertex)) 
                 return false;
-            }
+            
             VertexSet.Remove(vertex);
             return true;
         }
 
-        public void DeleteVertex(IEnumerable<T> vertexSet)
+        public void DeleteVertices(IEnumerable<T> vertices)
         {
-            if (vertexSet == null) {
-                throw new ArgumentNullException();
-            }
-            using (var it = VertexSet.GetEnumerator())
+            if (vertices == null) 
+                throw new ArgumentNullException(nameof(vertices));
+
+            foreach (var vertex in vertices)
             {
-                while (it.MoveNext()) {
-                    if (it.Current != null) {
-                        VertexSet.Remove(it.Current);
-                    }
-                }
+                DeleteVertex(vertex);
             }
+
+        }
+        public int EdgesNumber()
+        {
+            return EdgeSet.Count;
+        }
+
+        public int VerticesNumber()
+        {
+            return VertexSet.Count;
+        }
+
+        public IEnumerable<T> GetVertexSet()
+        {
+            return VertexSet;
+        }
+        public IEnumerable<IPairValue<T>> GetEdgesSet()
+        {
+            return EdgeSet;
         }
 
         public abstract bool AddEdge(T v1, T v2, K w);
-
 
         public abstract bool DeleteEdge(T v1, T v2);
 
@@ -76,26 +89,7 @@ namespace DataStructures
 
         public abstract int Degree(T vertex);
 
-        public int VerticesNumber()
-        {
-            return VertexSet.Count;
-        }
-
-        public int EdgesNumber()
-        {
-            return EdgeSet.Count;
-        }
-
         public abstract IEnumerable<T> AdjacentVertices(T vertex);
-
-        public IEnumerable<T> GetVertexSet()
-        {
-            return VertexSet;
-        }
-        public IEnumerable<IPairValue<T>> GetEdgesSet()
-        {
-            return EdgeSet;
-        }
 
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DataStructures
 {
-    public class DirectedGraph<T, K> : AbstractGraph<T, K>
+    public class UndirectedGraph<T, K> : AbstractGraph<T, K>
     {
         public override bool AddEdge(T v1, T v2, K w)
         {
@@ -16,15 +16,19 @@ namespace DataStructures
             if (w is null)
                 throw new ArgumentNullException(nameof(w));
 
-            if (!VertexSet.Contains(v1) || !VertexSet.Contains(v2)) 
+            if (!VertexSet.Contains(v1) || !VertexSet.Contains(v2))
+                return false;
+
+            IPairValue<T> pair_1 = new PairValueI<T>(v1, v2);
+            IPairValue<T> pair_2 = new PairValueI<T>(v2, v1);
+
+            if (EdgeSet.Contains(pair_1) || EdgeSet.Contains(pair_2))
                 return false;
             
-            IPairValue<T> pair = new PairValueI<T>(v1, v2);
-            if (EdgeSet.Contains(pair)) 
-                return false;
-            
-            EdgeSet.Add(pair);
-            Weights[pair] = w;
+            EdgeSet.Add(pair_1);
+            EdgeSet.Add(pair_2);
+            Weights[pair_1] = w;
+            Weights[pair_2] = w;
             return true;
         }
 
@@ -37,9 +41,8 @@ namespace DataStructures
                 throw new ArgumentNullException(nameof(v2));
 
             IPairValue<T> pair = new PairValueI<T>(v1, v2);
-            if (!Weights.ContainsKey(pair)) 
+            if (!Weights.ContainsKey(pair))
                 throw new ArgumentException();
-            
             return Weights[pair];
         }
 
@@ -51,10 +54,15 @@ namespace DataStructures
             if (v2 is null)
                 throw new ArgumentNullException(nameof(v2));
 
-            IPairValue<T> pair = new PairValueI<T>(v1, v2);
-            if (EdgeSet.Contains(pair)) {
-                EdgeSet.Remove(pair);
-                Weights.Remove(pair);
+            IPairValue<T> pair_1 = new PairValueI<T>(v1, v2);
+            IPairValue<T> pair_2 = new PairValueI<T>(v2, v1);
+            if (EdgeSet.Contains(pair_1) || EdgeSet.Contains(pair_2))
+            {
+                EdgeSet.Remove(pair_1);
+                Weights.Remove(pair_1);
+
+                EdgeSet.Remove(pair_2);
+                Weights.Remove(pair_2);
                 return true;
             }
             return false;
@@ -68,37 +76,36 @@ namespace DataStructures
             if (v2 is null)
                 throw new ArgumentNullException(nameof(v2));
 
-            if (!VertexSet.Contains(v1) || !VertexSet.Contains(v2)) 
+            if (!VertexSet.Contains(v1) || !VertexSet.Contains(v2))
                 throw new ArgumentException();
-            
+
             return EdgeSet.Contains(new PairValueI<T>(v1, v2));
         }
 
         public override int Degree(T vertex)
         {
-            if (vertex == null) 
+            if (vertex == null)
                 throw new ArgumentNullException(nameof(vertex));
-            
-            if (!VertexSet.Contains(vertex)) 
+
+            if (!VertexSet.Contains(vertex))
                 throw new ArgumentException();
-            
-            return InDegree(vertex) + OutDegree(vertex);
+
+            int counter = 0;
+            foreach (IPairValue<T> pair in EdgeSet)
+                if (pair.GetFirst().Equals(vertex))
+                    counter++;
+            return counter;
         }
 
         public override int InDegree(T vertex)
         {
             if (vertex == null)
                 throw new ArgumentNullException(nameof(vertex));
-            
+
             if (!VertexSet.Contains(vertex))
                 throw new ArgumentException();
-            
-            int counter = 0;
-            foreach (var pair in EdgeSet)
-                if (pair.GetSecond().Equals(vertex))
-                    counter++;
 
-            return counter;
+            return Degree(vertex);
         }
 
         public override int OutDegree(T vertex)
@@ -109,20 +116,19 @@ namespace DataStructures
             if (!VertexSet.Contains(vertex))
                 throw new ArgumentException();
 
-            int counter = 0;
-            foreach (var pair in EdgeSet) 
-                if (pair.GetFirst().Equals(vertex)) 
-                    counter++;
-
-            return counter;
+            return Degree(vertex);
         }
         public override IEnumerable<T> AdjacentVertices(T vertex)
         {
-            foreach (IPairValue<T> p in EdgeSet) 
-                if (p.GetFirst().Equals(vertex)) 
-                    yield return p.GetSecond();
+            if (vertex == null)
+                throw new ArgumentNullException(nameof(vertex));
 
-            
+            if (!VertexSet.Contains(vertex))
+                throw new ArgumentException();
+
+            foreach (IPairValue<T> p in EdgeSet)
+                if (p.GetFirst().Equals(vertex))
+                    yield return p.GetSecond();
         }
     }
 }
