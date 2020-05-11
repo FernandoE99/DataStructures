@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace DataStructures
 {
-    public class Node
+    public class Node<T>
     {
 
-        private object data;
-        Node next;
+        private T data;
+        Node<T> next;
 
 
         Node()
@@ -15,18 +15,18 @@ namespace DataStructures
             next = this; 
         }
 
-       public Node(object data)
+       public Node(T data)
         {
             this.data = data;
             this.next = null;
         }
 
-        public object Data {
+        public T Data {
             get { return this.data;}
             set { this.data = value; }
         }
 
-        public Node Next {
+        public Node<T> Next {
             get { return this.next; }
             set { this.next = value; }
         }
