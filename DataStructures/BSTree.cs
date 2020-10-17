@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataStructures
 {
-    class tree
+    class BSTree
     {
 
         BSTNode Root { get; set; }
@@ -68,19 +68,15 @@ namespace DataStructures
             else if (key > parent.Data)
                 parent.Right = Remove(parent.Right, key);
 
-            // if value is same as parent's value, then this is the node to be deleted  
             else
             {
-                // node with only one child or no child  
                 if (parent.Left == null)
                     return parent.Right;
                 else if (parent.Right == null)
                     return parent.Left;
-
-                // node with two children: Get the inorder successor (smallest in the right subtree)  
+          
                 parent.Data = MinValue(parent.Right);
-
-                // Delete the inorder successor  
+       
                 parent.Right = Remove(parent.Right, parent.Data);
             }
 
