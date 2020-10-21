@@ -4,11 +4,11 @@ using System.Text;
 
 namespace DataStructures
 {
-    class BSTNode
+    public class BSTNode
     {
         private int data { get; set; }
-        BSTNode left { get; set; }
-        BSTNode right { get; set; }
+        public BSTNode left { get; set; }
+        public BSTNode right { get; set; }
 
 
 

@@ -4,12 +4,12 @@ using System.Text;
 
 namespace DataStructures
 {
-    class BSTree
+    public class BSTree
     {
 
-        BSTNode Root { get; set; }
+        public BSTNode Root { get; set; }
 
-        public void insert(int value) {
+        public bool insert(int value) {
 
             BSTNode before = null, after = this.Root;
             while (after != null) {
@@ -23,7 +23,7 @@ namespace DataStructures
                     after = after.Right;
                 }
                 else {
-                    Console.WriteLine("That value already exists");
+                    return false;
                 }
             }
 
@@ -43,7 +43,7 @@ namespace DataStructures
                     before.Right = newNode;
                 }
             }
-            Console.WriteLine("The noce was added successfully");
+            return true;
         }
 
         public BSTNode Find(int value) {
